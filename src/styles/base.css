@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Core Semantic Colors - High Contrast */
+    --color-text-base: #000000;
+    --color-text-muted: #1f2937;
+    --color-text-inverted: #ffffff;
+    --color-bg-fill: #ffffff;
+    --color-bg-card: #ffffff;
+    --color-bg-muted: #e5e7eb; /* Darker gray for tags visibility */
+    --color-bg-inverted: #000000;
+    --color-border-line: #d1d5db;
+    
+    /* Typography */
+    --font-sans: "DM Sans", system-ui, sans-serif;
+    --font-heading: "Kanit", sans-serif;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-text-base: #ffffff;
+      --color-text-muted: #d1d5db;
+      --color-text-inverted: #000000;
+      --color-bg-fill: #09090b;
+      --color-bg-card: #18181b;
+      --color-bg-muted: #27272a;
+      --color-bg-inverted: #ffffff;
+      --color-border-line: #3f3f46;
+    }
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--color-bg-fill);
+    color: var(--color-text-base);
+  }
+  
+  body {
+    background-color: var(--color-bg-fill);
+    color: var(--color-text-base);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-text-base);
+  }
+}
+
+/* ===================================
+   UTILITIES & ANIMATIONS
+   =================================== */
+.hover-underline {
+  text-decoration: underline 1px rgba(0, 0, 0, 0);
+  text-underline-offset: 5px;
+  transition: text-decoration-color 300ms;
+}
+
+.hover-underline:hover {
+  text-decoration-color: currentColor;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.icon-spin {
+  animation: spin 2s linear infinite;
+}

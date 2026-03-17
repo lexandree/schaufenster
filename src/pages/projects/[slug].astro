@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { Icon } from 'astro-icon/components';
+
+export async function getStaticPaths() {
+  const projectEntries = await getCollection('projects');
+  return projectEntries.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<Layout seo={{ title: `${entry.data.title} | Alexander Andreev`, description: entry.data.description, url: `https://lexandree.github.io/schaufenster/projects/${entry.slug}`, image: '', domain: 'lexandree.github.io' }}>
+  <article class="max-w-2xl mx-auto py-10 px-6 prose">
+    <div class="mb-8">
+      <a href="/schaufenster/" class="text-sm text-skin-muted hover:text-skin-base flex items-center gap-1 mb-4 transition-colors no-underline">
+        <Icon name="mdi:arrow-left" class="w-4 h-4" />
+        Back to Portfolio
+      </a>
+      <h1 class="text-3xl font-bold tracking-tight text-skin-base mb-2">{entry.data.title}</h1>
+      <p class="text-skin-base text-lg leading-relaxed mb-4">{entry.data.description}</p>
+      
+      <div class="flex flex-wrap gap-2 mb-6">
+        {entry.data.tags.map((tag: string) => (
+          <span class="px-2 py-1 text-xs font-bold bg-skin-muted border border-skin-line text-skin-base rounded-md shadow-sm">
+            {tag}
+          </span>
+        ))}
+      </div>
+      
+      <div class="flex gap-4">
+        {entry.data.githubUrl && (
+          <a href={entry.data.githubUrl} target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline no-underline">
+            <Icon name="mdi:github" class="w-4 h-4" />
+            Source Code
+          </a>
+        )}
+        {entry.data.demoUrl && (
+          <a href={entry.data.demoUrl} target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline no-underline">
+            <Icon name="mdi:launch" class="w-4 h-4" />
+            Live Demo
+          </a>
+        )}
+      </div>
+    </div>
+    
+    <div class="border-t border-skin-line pt-8 mt-8">
+      <Content />
+    </div>
+  </article>
+</Layout>

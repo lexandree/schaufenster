@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { homePageContent, identity } from "../config";
+import { Icon } from "astro-icon/components";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const projects = await getCollection("projects");
+const sortedProjects = projects.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  
+  const orderA = a.data.order ?? 99;
+  const orderB = b.data.order ?? 99;
+  return orderA - orderB;
+});
+---
+
+<Layout seo={homePageContent.seo}>
+  <section class="mt-16 sm:mt-24 max-w-2xl mx-auto">
+    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-skin-base mb-4">
+      {identity.name}
+    </h1>
+    <p class="text-xl sm:text-2xl text-skin-base mb-6 font-medium">
+      {homePageContent.role}
+    </p>
+    <p class="text-base text-skin-base mb-8 max-w-xl leading-relaxed">
+      {homePageContent.description}
+    </p>
+    
+    <div class="flex flex-wrap gap-4 items-center">
+      <a href="https://github.com/lexandree" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-skin-inverted text-skin-inverted font-medium rounded-md opacity-90 hover:opacity-100 transition-colors">
+        <Icon name="mdi:github" class="w-5 h-5" />
+        <span>GitHub</span>
+      </a>
+      <a href="https://linkedin.com/in/al-andreev" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-skin-card border border-skin-line text-skin-base font-medium rounded-md hover:bg-skin-fill transition-colors">
+        <Icon name="mdi:linkedin" class="w-5 h-5" />
+        <span>LinkedIn</span>
+      </a>
+      <a href="https://huggingface.co/lexandree" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-skin-card border border-skin-line text-skin-base font-medium rounded-md hover:bg-skin-fill transition-colors">
+        <Icon name="mdi:robot-outline" class="w-5 h-5" />
+        <span>HuggingFace</span>
+      </a>
+      <a href={`mailto:${identity.email}`} class="flex items-center gap-2 px-4 py-2 bg-skin-card border border-skin-line text-skin-base font-medium rounded-md hover:bg-skin-fill transition-colors">
+        <Icon name="mdi:email" class="w-5 h-5" />
+        <span>Email</span>
+      </a>
+      <a href="/schaufenster/Andreev_CV.pdf" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 font-medium rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">
+        <Icon name="mdi:file-pdf-box" class="w-5 h-5" />
+        <span>Download CV</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-24 max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold tracking-tight text-skin-base mb-8">Selected Projects</h2>
+    <div id="projects-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {sortedProjects.map((project) => (
+        <div class={project.data.featured ? "sm:col-span-2" : ""}>
+          <ProjectCard
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+            githubUrl={project.data.githubUrl}
+            demoUrl={project.data.demoUrl}
+            slug={project.slug}
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+</Layout>

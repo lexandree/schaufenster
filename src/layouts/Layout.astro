@@ -1,0 +1,179 @@
+---
+import { Icon } from "astro-icon/components";
+import {
+  navBarLinks,
+  identity,
+  measurementId,
+  googleSiteVerification,
+} from "../config";
+import GoogleAnalytics from "../components/GoogleAnalytics.astro";
+import type { SEOInfo } from "../types/config";
+import "@styles/base.css";
+
+interface Props {
+  seo: SEOInfo;
+}
+
+const { seo } = Astro.props;
+const ogImageUrl = seo.image;
+---
+
+<script>
+  const linkMenuButton = document.getElementById(
+    "link-menu-button",
+  ) as HTMLButtonElement;
+  const linkMenu = document.getElementById("link-menu") as HTMLDivElement;
+  const openIndicator = document.getElementById(
+    "open-indicator",
+  ) as HTMLSpanElement;
+
+  linkMenuButton.addEventListener("click", () => {
+    const isOpen = linkMenu.classList.contains("opacity-0");
+    if (isOpen) {
+      linkMenu.classList.remove("pointer-events-none");
+      linkMenu.classList.remove("opacity-0");
+      linkMenu.classList.add("pointer-events-auto");
+      openIndicator.innerText = "×";
+      linkMenuButton.setAttribute("aria-expanded", "true");
+    } else {
+      linkMenu.classList.add("pointer-events-none");
+      linkMenu.classList.add("opacity-0");
+      linkMenu.classList.remove("pointer-events-auto");
+      openIndicator.innerText = "+";
+      linkMenuButton.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    const isLinkMenuButtonClicked =
+      event.target === linkMenuButton ||
+      linkMenuButton.contains(event.target as Node);
+    const isLinkMenuClicked =
+      event.target === linkMenu || linkMenu.contains(event.target as Node);
+
+    if (!isLinkMenuButtonClicked && !isLinkMenuClicked) {
+      linkMenu.classList.add("pointer-events-none");
+      linkMenu.classList.add("opacity-0");
+      linkMenu.classList.remove("pointer-events-auto");
+      openIndicator.innerText = "+";
+      linkMenuButton.setAttribute("aria-expanded", "false");
+    }
+  });
+</script>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/schaufenster/favicon.svg" />
+    <link rel="sitemap" href="/schaufenster/sitemap-index.xml" />
+    <link rel="canonical" href={seo.url} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Kanit:wght@500;600&family=KoHo:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>{seo.title}</title>
+
+    <meta name="description" content={seo.description} />
+
+    <meta property="og:url" content={seo.url} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content={seo.domain} />
+    <meta property="twitter:url" content={seo.url} />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <meta name="google-site-verification" content={googleSiteVerification} />
+    {measurementId && <GoogleAnalytics measurementId={measurementId} />}
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": `${seo.url}/#person`,
+            name: identity.name,
+            url: seo.url,
+            jobTitle: "Data Scientist & Software Developer",
+            sameAs: [
+              "https://github.com/lexandree",
+              "https://linkedin.com/in/al-andreev"
+            ],
+          },
+          {
+            "@type": "WebSite",
+            "@id": `${seo.url}/#website`,
+            url: seo.url,
+            name: identity.name,
+            description: seo.description,
+            publisher: {
+              "@id": `${seo.url}/#person`,
+            },
+            inLanguage: "en",
+          }
+        ],
+      })}
+    />
+  </head>
+  <body class="bg-skin-fill text-skin-base min-h-screen">
+    <header>
+      <div class="px-6 py-6 max-w-2xl mx-auto flex items-center justify-between">
+        <a href="/schaufenster/" class="font-bold text-xl tracking-tight hover:text-blue-500 transition-colors">
+          {identity.name}
+        </a>
+        <nav class="navbar">
+          <ul class="hidden sm:flex sm:items-center sm:gap-4">
+            {
+              navBarLinks.map((link) => {
+                const isActive =
+                  Astro.url.pathname === link.url ||
+                  (link.url !== "/schaufenster/" && Astro.url.pathname.startsWith(link.url));
+                return (
+                  <li>
+                    <a
+                      class={`block py-2 text-sm font-medium transition-colors duration-150 ${
+                        isActive
+                          ? "text-blue-600 dark:text-blue-400"
+                          : "text-skin-muted hover:text-skin-base"
+                      }`}
+                      href={link.url}
+                      target={link.external ? "_blank" : "_self"}
+                    >
+                      {link.title}
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </nav>
+        <div class="flex items-center gap-2">
+          <a
+            href={`mailto:${identity.email}`}
+            class="block p-2 text-skin-muted hover:text-skin-base transition-colors duration-150"
+            aria-label="Email"
+          >
+            <Icon name="mdi:email" width={24} height={24} />
+          </a>
+        </div>
+      </div>
+    </header>
+    <main class="mb-32 max-w-2xl mx-auto px-6">
+      <slot />
+    </main>
+    <footer class="max-w-2xl mx-auto px-6 py-8 border-t border-skin-line text-sm text-skin-muted flex justify-between items-center">
+      <p>&copy; {new Date().getFullYear()} {identity.name}. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

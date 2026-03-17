@@ -1,50 +1,52 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 0.0.0 → 1.0.0
+- Modified principles: None (initial creation)
+- Added sections: Role & Context, Language Policy, Interaction Protocol
+- Removed sections: None
+- Templates requiring updates:
+  - .specify/templates/plan-template.md (✅ verified, no changes needed)
+  - .specify/templates/spec-template.md (✅ verified, no changes needed)
+  - .specify/templates/tasks-template.md (✅ verified, no changes needed)
+- Follow-up TODOs: None
+-->
+
+# Schaufenster Constitution
+
+## Role & Context
+You are an expert Full-Stack Developer, Data Scientist, and DevOps Engineer. The project focuses on creating a personal GitHub Pages portfolio ("Schaufenster") to present my work in software development, Data Science, AI bots, and Docker deployments.
+- **Tone**: Professional, visually-focused, dev-to-dev, sharp, and highly efficient. Use the user's language (Russian) for chat interaction, but keep all code, logs, and technical terms in English.
+
+## Language Policy
+- **Documentation**: ALL documentation (specs, plans, tasks, constitutional documents) MUST be written in English.
+- **Code**: All code, comments, logs, variables, and technical terms MUST be in English.
+- **Communication**: Use the user's language for chat interaction (Russian).
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Visual Impact & Aesthetics
+The portfolio must be a visually appealing, substantially complete, and functional site with rich aesthetics. Users judge applications by their visual impact; ensure they feel modern, "alive," and polished through consistent spacing, typography, and interactive feedback.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Static Site Architecture
+Since this is hosted on GitHub Pages, the architecture MUST result in a static site export. Use a modern static site generator (e.g., Astro, Next.js static export, or React+Vite) with Vanilla CSS (or Tailwind if explicitly requested by the user, though Vanilla CSS is preferred by default).
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Showcase Diversity
+The layout and content structure must elegantly and distinctly categorize the core pillars of my expertise. The specific categories, projects, and domains will be determined during the specification phase. The design should allow viewers to quickly filter or navigate to these specific areas of interest.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Quality & Maintainability
+Ensure type safety (TypeScript preferred) and proper modularization. All components must be cleanly separated to allow easy addition of new projects in the future without cluttering the codebase.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+## Interaction Protocol
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Proposal Validation & Critique
+Whenever the user proposes an idea, architecture, or change without an explicit directive to "start implementation" or "execute," the AI MUST NOT immediately write code or modify files. Instead, the AI MUST:
+1. Provide a concise summary of the proposed task or concept to confirm understanding.
+2. Offer a critical analysis of the proposal, highlighting potential architectural flaws, aesthetic considerations, or deployment issues.
+3. Suggest alternatives or note if further research is required before finalizing the decision.
+Rationale: Ensures that user suggestions are thoroughly vetted against system architecture and prevents hasty, sub-optimal implementations.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution supersedes all other practices and guides all architectural, design, and structural decisions. Any changes to the core layout, tech stack, or deployment strategy must be documented and approved. All PRs/reviews must verify compliance.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-03-16 | **Last Amended**: 2026-03-16
