@@ -4,6 +4,8 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  repository_dispatch:
+    types: [portfolio-update]
 
 permissions:
   contents: read
@@ -26,11 +28,32 @@ jobs:
         run: npm install
 
       - name: Sync External Projects
+        shell: bash
         run: |
+          echo "Starting full synchronization of all external projects..."
           mkdir -p src/content/projects
-          curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o src/content/projects/roentgen-for-docs.md || echo "Failed to fetch roentgen-for-docs."
-          curl -s -f https://raw.githubusercontent.com/lexandree/tv-audience-forecaster/main/portfolio-export.md -o src/content/projects/tv-audience-forecaster.md || echo "Failed to fetch tv-audience-forecaster."
-          curl -s -f https://raw.githubusercontent.com/lexandree/vae-marketing/main/portfolio-export.md -o src/content/projects/vae-marketing.md || echo "Failed to fetch vae-marketing."
+
+          PROJECTS="roentgen-for-docs tv-audience-forecaster vae-marketing"
+          for PROJECT in $PROJECTS; do
+            echo "Attempting to sync $PROJECT..."
+            
+            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md"
+            if curl -s -f "$URL" -o "src/content/projects/${PROJECT}.md"; then
+              echo "✓ Successfully synced Markdown for $PROJECT"
+              
+              if [ "$PROJECT" = "vae-marketing" ]; then
+                echo "Fetching assets for $PROJECT..."
+                mkdir -p public/assets/vae-marketing
+                FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
+                for FILE in $FILES; do
+                  ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}"
+                  curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Missing asset: $FILE"
+                done
+              fi
+            else
+              echo "  ! Failed to fetch $PROJECT from $URL (using local version if available)"
+            fi
+          done
 
       - name: Build Astro site
         run: npm run build
