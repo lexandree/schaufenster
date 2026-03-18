@@ -23,13 +23,22 @@ This project applies a **Disentangled Variational Autoencoder (Beta-VAE)** to ra
 - **High-Fidelity Tracking**: Automated HPO Sweeps identified optimal latent dimensions (`latent_dim=32`) and regularization strengths (`beta=2.0`), achieving high Mutual Information Gap (MIG) scores, indicating strong factor disentanglement.
 - **Actionable Business Insights**: Outputs a detailed `inference_report.json` segmenting audiences based on their reaction depth and identifying "gateway categories" drive long-term habit changes.
 
-### Training Dynamics
+### Training Dynamics & Beta Annealing
 The model effectively balances reconstruction fidelity (MSE Loss) with latent space regularization (KL Divergence) over a carefully tuned annealing schedule.
 
-![Training Curves](/schaufenster/assets/vae-marketing/training_curves.svg)
-![Beta Annealing](/schaufenster/assets/vae-marketing/beta_annealing.svg)
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+  <div class="border border-skin-line rounded-lg overflow-hidden bg-white">
+    <iframe src="/schaufenster/assets/vae-marketing/training_curves.html" class="w-full h-96 border-none" title="Training Curves"></iframe>
+  </div>
+  <div class="border border-skin-line rounded-lg overflow-hidden bg-white">
+    <iframe src="/schaufenster/assets/vae-marketing/beta_annealing.html" class="w-full h-96 border-none" title="Beta Annealing Schedule"></iframe>
+  </div>
+</div>
 
-### Hyperparameter Search
+*(Note: If the interactive charts above don't load, view the static versions: [Training Curves](/schaufenster/assets/vae-marketing/training_curves.svg), [Beta Annealing](/schaufenster/assets/vae-marketing/beta_annealing.svg))*
+
+
+### Hyperparameter Search (WandB Sweeps)
 The following interactive chart shows the results of the Bayesian hyperparameter search. You can filter and reorder axes to explore the relationships between Latent Dimension, Beta Regularization, and Learning Rate.
 
 <div class="aspect-video w-full border border-skin-line rounded-lg overflow-hidden bg-white mt-4">
@@ -40,6 +49,4 @@ The following interactive chart shows the results of the Bayesian hyperparameter
   ></iframe>
 </div>
 
-*(Note: If the interactive chart above doesn't load, view the static version below)*
-
-![Hyperparameter Search (Static)](/schaufenster/assets/vae-marketing/sweep_parallel_coords.svg)
+*(Note: If the interactive chart above doesn't load, view the static version [here](/schaufenster/assets/vae-marketing/sweep_parallel_coords.svg))*
