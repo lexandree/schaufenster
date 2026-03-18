@@ -7,7 +7,7 @@ on:
   repository_dispatch:
     types: [portfolio-update]
 
-# Global environment variables to address deprecation warnings
+# Force GitHub to use Node 24 for all actions to satisfy deprecation requirements
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -20,36 +20,44 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout your repository using git
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Node.js v24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Sync External Projects
         shell: bash
         run: |
           echo "Starting synchronization of external project descriptions..."
+          mkdir -p src/content/projects
           
-          # 1. Determine which project to sync
+          # Determine which project to sync
           PAYLOAD_PROJECT="${{ github.event.client_payload.project }}"
           
-          if [ -n "$PAYLOAD_PROJECT" ] && [ "$PAYLOAD_PROJECT" != "null" ]; then
-            # Sync only the project mentioned in the payload
-            PROJECT=$(echo "$PAYLOAD_PROJECT" | tr '_' '-')
-            echo "Specific project update requested: $PROJECT"
-            PROJECTS_TO_SYNC="$PROJECT"
-          else
-            # Default: Sync all known projects
-            echo "Full sync triggered (manual, push, or empty payload)."
+          if [ -z "$PAYLOAD_PROJECT" ] || [ "$PAYLOAD_PROJECT" = "null" ]; then
+            echo "Full sync triggered."
             PROJECTS_TO_SYNC="roentgen-for-docs tv-audience-forecaster vae-marketing"
+          else
+            # Normalize project name (replace underscores with hyphens)
+            PROJECT=$(echo "$PAYLOAD_PROJECT" | tr '_' '-')
+            echo "Specific project update: $PROJECT"
+            PROJECTS_TO_SYNC="$PROJECT"
           fi
 
-          # 2. Perform sync
           for PROJECT in $PROJECTS_TO_SYNC; do
-            echo "Attempting to sync $PROJECT..."
+            echo "Fetching $PROJECT..."
+            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md"
             
             # Fetch Markdown
-            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md"
             if curl -s -f "$URL" -o "src/content/projects/${PROJECT}.md"; then
-              echo "✓ Successfully synced Markdown for $PROJECT"
+              echo "✓ Updated Markdown for $PROJECT"
               
               # Special assets sync for vae-marketing
               if [ "$PROJECT" = "vae-marketing" ]; then
@@ -58,19 +66,21 @@ jobs:
                 FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
                 for FILE in $FILES; do
                   ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}"
-                  curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Failed to fetch asset: $FILE"
+                  curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Missing asset: $FILE"
                 done
               fi
             else
-              echo "  ! Failed to fetch $PROJECT from $URL (skipping or using local cache)"
+              echo "  ! Failed to fetch $PROJECT from $URL (using local version if available)"
             fi
           done
-          echo "Sync step completed."
 
-      - name: Install, build, and upload your site
-        uses: withastro/action@v2
+      - name: Build Astro site
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          node-version: 22
+          path: dist/
 
   deploy:
     needs: build
