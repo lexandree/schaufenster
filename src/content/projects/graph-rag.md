@@ -3,8 +3,8 @@ title: "Multilingual Chatbot for Telegram / Knowledge base"
 description: "Advanced AI Architecture using Neo4j and LLM Reasoning for legal text retrieval. Transcends standard vector search by understanding complex legal dependencies."
 pubDate: 2026-03-15
 tags: ["Python", "Neo4j", "LLMs", "Knowledge Graph", "Langchain", "LangGraph"]
-featured: true
-order: 1
+featured: false
+order: 10
 ---
 
 ## Problem Statement
