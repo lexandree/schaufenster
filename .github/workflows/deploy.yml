@@ -23,16 +23,16 @@ jobs:
         run: |
           echo "Fetching latest project descriptions from external repositories..."
           
-          # Fetch from roentgen_for_docs
-          if curl -s -f https://raw.githubusercontent.com/lexandree/roentgen_for_docs/main/portfolio-export.md -o tmp_roentgen.md; then
+          # Fetch from roentgen-for-docs
+          if curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o tmp_roentgen.md; then
             mv tmp_roentgen.md src/content/projects/roentgen-for-docs.md
             echo "Successfully synced roentgen-for-docs"
           else
-            echo "Failed to fetch roentgen_for_docs, keeping existing local copy."
+            echo "Failed to fetch roentgen-for-docs, keeping existing local copy."
           fi
 
           # Future proofing: you can add other repositories here like tv_audience_forecasting
-          # if curl -s -f https://raw.githubusercontent.com/lexandree/tv_audience_forecasting/main/portfolio-export.md -o tmp_tv.md; then
+          # if curl -s -f https://raw.githubusercontent.com/lexandree/tv-audience-forecaster/main/portfolio-export.md -o tmp_tv.md; then
           #   mv tmp_tv.md src/content/projects/tv-audience-forecaster.md
           # fi
 
