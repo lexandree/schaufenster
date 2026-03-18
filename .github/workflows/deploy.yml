@@ -10,7 +10,6 @@ on:
 # Global environment variables to address deprecation warnings
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 permissions:
   contents: read
@@ -71,7 +70,7 @@ jobs:
       - name: Install, build, and upload your site
         uses: withastro/action@v2
         with:
-          node-version: 22 # Use stable LTS
+          node-version: 22
 
   deploy:
     needs: build
