@@ -25,11 +25,36 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Sync External Projects
+      - name: Sync All External Projects
+        shell: bash
         run: |
-          echo "Syncing roentgen-for-docs..."
+          echo "Starting full synchronization of all external projects..."
           mkdir -p src/content/projects
-          curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o src/content/projects/roentgen-for-docs.md || echo "Failed to fetch roentgen-for-docs."
+
+          PROJECTS="roentgen-for-docs tv-audience-forecaster vae-marketing"
+          for PROJECT in $PROJECTS; do
+            echo "Attempting to sync $PROJECT..."
+            
+            # Fetch Markdown
+            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md"
+            if curl -s -f "$URL" -o "src/content/projects/${PROJECT}.md"; then
+              echo "✓ Successfully synced Markdown for $PROJECT"
+              
+              # Special assets sync for vae-marketing
+              if [ "$PROJECT" = "vae-marketing" ]; then
+                echo "Fetching images for $PROJECT..."
+                mkdir -p public/assets/vae-marketing
+                FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
+                for FILE in $FILES; do
+                  ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}"
+                  curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Missing asset: $FILE"
+                done
+              fi
+            else
+              echo "  ! Failed to fetch $PROJECT from $URL (using local version if available)"
+            fi
+          done
+          echo "Full sync step completed."
 
       - name: Build Astro site
         run: npm run build
