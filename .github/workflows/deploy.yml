@@ -19,6 +19,12 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
       - name: Sync External Projects
         run: |
           echo "Fetching latest project descriptions from external repositories..."
