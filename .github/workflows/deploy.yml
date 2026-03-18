@@ -4,12 +4,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-  repository_dispatch:
-    types: [portfolio-update]
-
-# Force GitHub to use Node 24 for all actions to satisfy deprecation requirements
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: read
@@ -23,56 +17,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js v24
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
-          cache: 'npm'
+          node-version: 22 # Stable LTS
 
       - name: Install dependencies
         run: npm install
-
-      - name: Sync External Projects
-        shell: bash
-        run: |
-          echo "Starting synchronization of external project descriptions..."
-          mkdir -p src/content/projects
-          
-          # Determine which project to sync
-          PAYLOAD_PROJECT="${{ github.event.client_payload.project }}"
-          
-          if [ -z "$PAYLOAD_PROJECT" ] || [ "$PAYLOAD_PROJECT" = "null" ]; then
-            echo "Full sync triggered."
-            PROJECTS_TO_SYNC="roentgen-for-docs tv-audience-forecaster vae-marketing"
-          else
-            # Normalize project name (replace underscores with hyphens)
-            PROJECT=$(echo "$PAYLOAD_PROJECT" | tr '_' '-')
-            echo "Specific project update: $PROJECT"
-            PROJECTS_TO_SYNC="$PROJECT"
-          fi
-
-          for PROJECT in $PROJECTS_TO_SYNC; do
-            echo "Fetching $PROJECT..."
-            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md"
-            
-            # Fetch Markdown
-            if curl -s -f "$URL" -o "src/content/projects/${PROJECT}.md"; then
-              echo "✓ Updated Markdown for $PROJECT"
-              
-              # Special assets sync for vae-marketing
-              if [ "$PROJECT" = "vae-marketing" ]; then
-                echo "Fetching images for $PROJECT..."
-                mkdir -p public/assets/vae-marketing
-                FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
-                for FILE in $FILES; do
-                  ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}"
-                  curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Missing asset: $FILE"
-                done
-              fi
-            else
-              echo "  ! Failed to fetch $PROJECT from $URL (using local version if available)"
-            fi
-          done
 
       - name: Build Astro site
         run: npm run build
