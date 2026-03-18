@@ -30,14 +30,6 @@ jobs:
           mkdir -p src/content/projects
           curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o src/content/projects/roentgen-for-docs.md || echo "Failed to fetch roentgen-for-docs."
           curl -s -f https://raw.githubusercontent.com/lexandree/tv-audience-forecaster/main/portfolio-export.md -o src/content/projects/tv-audience-forecaster.md || echo "Failed to fetch tv-audience-forecaster."
-          curl -s -f https://raw.githubusercontent.com/lexandree/vae-marketing/main/portfolio-export.md -o src/content/projects/vae-marketing.md || echo "Failed to fetch vae-marketing."
-          
-          echo "Fetching assets for vae-marketing..."
-          mkdir -p public/assets/vae-marketing
-          FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
-          for FILE in $FILES; do
-            curl -s -f "https://raw.githubusercontent.com/lexandree/vae-marketing/main/docs/images/${FILE}" -o "public/assets/vae-marketing/${FILE}" || echo "Failed to fetch $FILE"
-          done
 
       - name: Build Astro site
         run: npm run build
