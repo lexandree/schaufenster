@@ -1,0 +1,58 @@
+
+Я создал всю необходимую инфраструктуру в этом репозитории (roentgen_for_docs).
+
+  Я сгенерировал три файла:
+
+
+   1. cv-short.md — краткое описание проекта для главной страницы вашего портфолио.
+   2. cv-long.md — расширенное описание с ключевыми фичами и технологическим стеком для отдельной страницы проекта.
+   3. .github/workflows/notify-portfolio.yml — GitHub Action, который автоматизирует процесс синхронизации.
+
+
+  Что вам нужно сделать дальше, чтобы магия заработала:
+
+
+  Шаг 1: Настройка в этом репозитории (roentgen_for_docs)
+   1. Откройте файл .github/workflows/notify-portfolio.yml.
+   2. Найдите строку repository: YOUR_GITHUB_USERNAME/schaufenster и замените YOUR_GITHUB_USERNAME на ваш реальный логин в GitHub.
+   3. Перейдите в настройки вашего аккаунта GitHub: Settings -> Developer settings -> Personal access tokens (Tokens (classic)).
+   4. Создайте новый токен (Generate new token) и выдайте ему галочку на repo (Full control of private repositories). Скопируйте этот токен.
+   5. Перейдите в настройки этого репозитория (roentgen_for_docs): Settings -> Secrets and variables -> Actions.
+   6. Создайте новый секрет с именем PAT_FOR_PORTFOLIO и вставьте туда скопированный токен.
+
+
+  Шаг 2: Настройка в репозитории портфолио (schaufenster)
+  Вам нужно будет добавить в репозиторий schaufenster новый GitHub Action, который будет "ловить" сигнал от этого проекта и запускать пересборку сайта (и публикацию на GitHub Pages).
+
+
+  Примерно такой Action (.github/workflows/rebuild.yml) вам нужно будет создать в папке schaufenster:
+
+
+    1 name: Rebuild Portfolio on Project Update
+    2
+    3 on:
+    4   repository_dispatch:
+    5     types: [project-cv-updated] # Этот тип мы шлем из roentgen_for_docs
+    6
+    7 jobs:
+    8   build_and_deploy:
+    9     runs-on: ubuntu-latest
+   10     steps:
+   11       - name: Checkout Code
+   12         uses: actions/checkout@v4
+   13
+   14       # ... здесь ваши стандартные шаги сборки Astro ...
+   15       - name: Install dependencies
+   16         run: npm ci
+   17
+   18       - name: Build with Astro
+   19         run: npm run build
+   20
+   21       # ... и шаг деплоя на GitHub Pages ...
+
+
+  Также в коде самого Astro (например, в файле страницы проекта) вам нужно будет использовать fetch для скачивания cv-short.md и cv-long.md по прямым ссылкам raw.githubusercontent.com.
+
+
+  Теперь каждый раз, когда вы будете пушить изменения в cv-short.md или cv-long.md в ветку main этого проекта, GitHub Actions автоматически пнет репозиторий вашего портфолио, Astro скачает актуальные файлы и пересоберет ваш
+  сайт!
