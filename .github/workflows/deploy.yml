@@ -30,6 +30,7 @@ jobs:
           mkdir -p src/content/projects
           curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o src/content/projects/roentgen-for-docs.md || echo "Failed to fetch roentgen-for-docs."
           curl -s -f https://raw.githubusercontent.com/lexandree/tv-audience-forecaster/main/portfolio-export.md -o src/content/projects/tv-audience-forecaster.md || echo "Failed to fetch tv-audience-forecaster."
+          curl -s -f https://raw.githubusercontent.com/lexandree/vae-marketing/main/portfolio-export.md -o src/content/projects/vae-marketing.md || echo "Failed to fetch vae-marketing."
 
       - name: Build Astro site
         run: npm run build
