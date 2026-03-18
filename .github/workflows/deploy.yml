@@ -23,18 +23,33 @@ jobs:
         run: |
           echo "Fetching latest project descriptions from external repositories..."
           
-          # Fetch from roentgen-for-docs
-          if curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o tmp_roentgen.md; then
-            mv tmp_roentgen.md src/content/projects/roentgen-for-docs.md
-            echo "Successfully synced roentgen-for-docs"
+          # Read the project from the dispatch payload
+          PAYLOAD_PROJECT="${{ github.event.client_payload.project }}"
+          
+          if [ -n "$PAYLOAD_PROJECT" ]; then
+            # Protect against underscore vs hyphen typos (e.g. roentgen_for_docs -> roentgen-for-docs)
+            PROJECT=$(echo "$PAYLOAD_PROJECT" | tr '_' '-')
+            echo "Webhook triggered by specific project: $PROJECT"
+            
+            if curl -s -f "https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md" -o "tmp_${PROJECT}.md"; then
+              mv "tmp_${PROJECT}.md" "src/content/projects/${PROJECT}.md"
+              echo "Successfully synced $PROJECT"
+            else
+              echo "Failed to fetch $PROJECT, keeping existing local copy."
+            fi
           else
-            echo "Failed to fetch roentgen-for-docs, keeping existing local copy."
+            echo "Manual or push trigger. Syncing all known projects..."
+            PROJECTS="roentgen-for-docs tv-audience-forecaster"
+            
+            for PROJECT in $PROJECTS; do
+              if curl -s -f "https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md" -o "tmp_${PROJECT}.md"; then
+                mv "tmp_${PROJECT}.md" "src/content/projects/${PROJECT}.md"
+                echo "Successfully synced $PROJECT"
+              else
+                echo "Could not fetch $PROJECT (maybe it is not public yet or file is missing)"
+              fi
+            done
           fi
-
-          # Future proofing: you can add other repositories here like tv_audience_forecasting
-          # if curl -s -f https://raw.githubusercontent.com/lexandree/tv-audience-forecaster/main/portfolio-export.md -o tmp_tv.md; then
-          #   mv tmp_tv.md src/content/projects/tv-audience-forecaster.md
-          # fi
 
       - name: Install, build, and upload your site
         uses: withastro/action@v2
