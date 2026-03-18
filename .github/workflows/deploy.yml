@@ -26,7 +26,10 @@ jobs:
         run: npm install
 
       - name: Sync External Projects
-        run: echo "Sync step started..."
+        run: |
+          echo "Syncing roentgen-for-docs..."
+          mkdir -p src/content/projects
+          curl -s -f https://raw.githubusercontent.com/lexandree/roentgen-for-docs/main/portfolio-export.md -o src/content/projects/roentgen-for-docs.md || echo "Failed to fetch roentgen-for-docs."
 
       - name: Build Astro site
         run: npm run build
