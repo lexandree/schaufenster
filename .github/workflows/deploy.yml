@@ -37,16 +37,36 @@ jobs:
             else
               echo "Failed to fetch $PROJECT, keeping existing local copy."
             fi
+
+            # Asset Sync Logic for specific projects
+            if [[ "$PROJECT" == "vae-marketing" ]]; then
+               echo "Fetching assets for $PROJECT..."
+               mkdir -p public/assets/vae-marketing
+               # Sync both SVGs and the interactive Plotly HTML
+               FILES=\"training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html\"
+               for FILE in $FILES; do
+                 curl -s -f \"https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}\" -o \"public/assets/vae-marketing/${FILE}\" || echo \"Failed to fetch $FILE\"
+               done
+            fi
           else
             echo "Manual or push trigger. Syncing all known projects..."
-            PROJECTS="roentgen-for-docs tv-audience-forecaster"
+            PROJECTS=\"roentgen-for-docs tv-audience-forecaster vae-marketing\"
             
             for PROJECT in $PROJECTS; do
-              if curl -s -f "https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md" -o "tmp_${PROJECT}.md"; then
-                mv "tmp_${PROJECT}.md" "src/content/projects/${PROJECT}.md"
-                echo "Successfully synced $PROJECT"
+              if curl -s -f \"https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md\" -o \"tmp_${PROJECT}.md\"; then
+                mv \"tmp_${PROJECT}.md\" \"src/content/projects/${PROJECT}.md\"
+                echo \"Successfully synced $PROJECT\"
+                
+                # Full sync assets for vae-marketing
+                if [[ \"$PROJECT\" == \"vae-marketing\" ]]; then
+                  mkdir -p public/assets/vae-marketing
+                  FILES=\"training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html\"
+                  for FILE in $FILES; do
+                    curl -s -f \"https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}\" -o \"public/assets/vae-marketing/${FILE}\" || echo \"Failed to fetch $FILE\"
+                  done
+                fi
               else
-                echo "Could not fetch $PROJECT (maybe it is not public yet or file is missing)"
+                echo \"Could not fetch $PROJECT\"
               fi
             done
           fi
