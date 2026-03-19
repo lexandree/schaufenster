@@ -30,23 +30,25 @@ jobs:
       - name: Sync External Projects
         shell: bash
         run: |
+          set -x # Enable debug mode to print all commands
           echo "Starting full synchronization of all external projects..."
-          mkdir -p src/content/projects
+          mkdir -p src/content/projects public/assets/vae-marketing
 
           PROJECTS="roentgen-for-docs tv-audience-forecaster vae-marketing"
+          CACHE_BUSTER=$(date +%s) # Generate unique timestamp to bust GitHub cache
+          
           for PROJECT in $PROJECTS; do
             echo "Attempting to sync $PROJECT..."
             
-            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md"
+            URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md?t=${CACHE_BUSTER}"
             if curl -s -f "$URL" -o "src/content/projects/${PROJECT}.md"; then
               echo "✓ Successfully synced Markdown for $PROJECT"
               
               if [ "$PROJECT" = "vae-marketing" ]; then
                 echo "Fetching assets for $PROJECT..."
-                mkdir -p public/assets/vae-marketing
                 FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
                 for FILE in $FILES; do
-                  ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}"
+                  ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}?t=${CACHE_BUSTER}"
                   curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Missing asset: $FILE"
                 done
               fi
@@ -54,6 +56,7 @@ jobs:
               echo "  ! Failed to fetch $PROJECT from $URL (using local version if available)"
             fi
           done
+          set +x # Disable debug mode
 
       - name: Build Astro site
         run: npm run build
