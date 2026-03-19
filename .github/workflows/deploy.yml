@@ -30,14 +30,23 @@ jobs:
       - name: Sync External Projects
         shell: bash
         run: |
-          set -x # Enable debug mode to print all commands
-          echo "Starting full synchronization of all external projects..."
+          echo "Starting synchronization of external projects..."
           mkdir -p src/content/projects public/assets/vae-marketing
 
-          PROJECTS="roentgen-for-docs tv-audience-forecaster vae-marketing"
+          PAYLOAD_PROJECT="${{ github.event.client_payload.project }}"
+          
+          if [ -n "$PAYLOAD_PROJECT" ] && [ "$PAYLOAD_PROJECT" != "null" ]; then
+            PROJECT=$(echo "$PAYLOAD_PROJECT" | tr '_' '-')
+            echo "Specific project update requested: $PROJECT"
+            PROJECTS_TO_SYNC="$PROJECT"
+          else
+            echo "Full sync triggered (manual, push, or empty payload)."
+            PROJECTS_TO_SYNC="roentgen-for-docs tv-audience-forecaster vae-marketing"
+          fi
+
           CACHE_BUSTER=$(date +%s) # Generate unique timestamp to bust GitHub cache
           
-          for PROJECT in $PROJECTS; do
+          for PROJECT in $PROJECTS_TO_SYNC; do
             echo "Attempting to sync $PROJECT..."
             
             URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/portfolio-export.md?t=${CACHE_BUSTER}"
@@ -56,7 +65,6 @@ jobs:
               echo "  ! Failed to fetch $PROJECT from $URL (using local version if available)"
             fi
           done
-          set +x # Disable debug mode
 
       - name: Build Astro site
         run: npm run build
