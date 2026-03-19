@@ -55,7 +55,8 @@ jobs:
               
               if [ "$PROJECT" = "vae-marketing" ]; then
                 echo "Fetching assets for $PROJECT..."
-                FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg sweep_parallel_coords.html"
+                # Only fetching SVGs as fallbacks. Interactive charts will be embedded via WandB iframes directly in the Markdown.
+                FILES="training_curves.svg beta_annealing.svg sweep_parallel_coords.svg"
                 for FILE in $FILES; do
                   ASSET_URL="https://raw.githubusercontent.com/lexandree/${PROJECT}/main/docs/images/${FILE}?t=${CACHE_BUSTER}"
                   curl -s -f "$ASSET_URL" -o "public/assets/vae-marketing/${FILE}" || echo "  ! Missing asset: $FILE"
