@@ -21,10 +21,10 @@ Please provide screenshots if there are changes in the appearance of the website
 
 ## Checklist:
 
-- [ ] I have followed [CONTRIBUTING.md](https://github.com/vinitshahdeo/portfolio/blob/main/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](https://github.com/vinitshahdeo/portfolio/blob/main/CODE_OF_CONDUCT.md).
+- [ ] I have followed [CONTRIBUTING.md](https://github.com/lexandree/schaufenster/blob/main/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](https://github.com/lexandree/schaufenster/blob/main/CODE_OF_CONDUCT.md).
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my own code
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] My changes generate no new warnings
 - [ ] I have linted my code — `npm run lint`
-- [ ] I have added @vinitshahdeo as a reviewer.
+- [ ] I have added @lexandree as a reviewer.

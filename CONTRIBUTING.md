@@ -1,4 +1,4 @@
-# Contributing to [Stellar Astro Dev Portfolio](https://astro.build/themes/details/stellar-astro-dev-portfolio/)
+# Contributing to [Alexander Andreev's Portfolio](https://lexandree.github.io/schaufenster/)
 
 We’re thrilled that you’re interested in contributing! Whether you're here to:
 
@@ -11,7 +11,7 @@ We want to make the process as simple and transparent as possible.
 
 ## How We Work
 
-We use [GitHub](https://github.com/vinitshahdeo/portfolio) for hosting our code, tracking issues, and managing feature requests. All code changes happen through pull requests, following [GitHub Flow](https://guides.github.com/introduction/flow/index.html). Your contributions—whether big or small—are always welcome!
+We use [GitHub](https://github.com/lexandree/schaufenster) for hosting our code, tracking issues, and managing feature requests. All code changes happen through pull requests, following [GitHub Flow](https://guides.github.com/introduction/flow/index.html). Your contributions—whether big or small—are always welcome!
 
 ## Development Workflow
 
@@ -29,20 +29,20 @@ If you’re new to GitHub Flow, check out this [guide](https://guides.github.com
 
 - Please refer to [`README.md`](./README.md) for local setup instructions.
 - Reference related issues in your pull request description to provide context.
-- Please ping [@vinit_shahdeo](https://x.com/vinit_shahdeo) if your pull request is not reviewed within three days.
+- Please ping [@lexandree](https://github.com/lexandree) if your pull request is not reviewed within three days.
 
 ## Reporting Bugs
 
-If you encounter any bugs, please report them through GitHub [issues](https://github.com/vinitshahdeo/portfolio/issues). Here's how you can help us:
+If you encounter any bugs, please report them through GitHub [issues](https://github.com/lexandree/schaufenster/issues). Here's how you can help us:
 
-1. [Open a new issue](https://github.com/vinitshahdeo/portfolio/issues/new).
+1. [Open a new issue](https://github.com/lexandree/schaufenster/issues/new).
 2. Provide detailed information about the bug, including steps to reproduce, expected vs. actual behavior, and any relevant screenshots.
 
 ## Proposing Features or Improvements
 
 To propose a new feature or improvement, feel free to:
 
-1. Start a discussion in the [Issues](https://github.com/vinitshahdeo/portfolio/issues) section.
+1. Start a discussion in the [Issues](https://github.com/lexandree/schaufenster/issues) section.
 2. Once a consensus is reached, submit a pull request with your proposed changes.
 
 ## Style Guide and Linting
@@ -55,8 +55,8 @@ npm run lint
 
 ## License
 
-By contributing to this repository, you agree that your contributions will be licensed under the project's [MIT License](https://github.com/vinitshahdeo/portfolio/blob/main/LICENSE). If you have concerns, feel free to contact the [@vinit_shahdeo](https://x.com/vinit_shahdeo).
+By contributing to this repository, you agree that your contributions will be licensed under the project's [MIT License](https://github.com/lexandree/schaufenster/blob/main/LICENSE). If you have concerns, feel free to contact [@lexandree](https://github.com/lexandree).
 
 ## Thank You!
 
-Your time and effort are truly appreciated. Every contribution helps make [Stellar Astro Dev Portfolio](https://astro.build/themes/details/stellar-astro-dev-portfolio/) better!
+Your time and effort are truly appreciated. Every contribution helps make [Alexander Andreev's Portfolio](https://lexandree.github.io/schaufenster/) better!

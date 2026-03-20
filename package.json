@@ -1,16 +1,16 @@
 {
-  "name": "better-bar",
+  "name": "schaufenster",
   "type": "module",
   "author": {
-    "name": "Vinit Shahdeo",
-    "email": "vinitshahdeo@gmail.com",
-    "url": "https://github.com/vinitshahdeo"
+    "name": "Alexander Andreev",
+    "email": "andreev.al@gmail.com",
+    "url": "https://github.com/lexandree"
   },
   "license": "MIT",
-  "description": "Minimal Portfolio for Software Engineer using Astro and Tailwind CSS | Made with ❤️ by Vinit Shahdeo",
+  "description": "Portfolio of Alexander Andreev - Data Scientist & Software Developer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vinitshahdeo/portfolio.git"
+    "url": "https://github.com/lexandree/schaufenster.git"
   },
   "version": "1.0.0",
   "scripts": {
@@ -20,8 +20,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "npx prettier . --write",
-    "author": "open https://github.com/vinitshahdeo",
-    "demo": "open https://vinitshahdeo.com"
+    "author": "open https://github.com/lexandree",
+    "demo": "open https://lexandree.github.io/schaufenster"
   },
   "dependencies": {
     "@astrojs/check": "^0.5.10",
@@ -47,8 +47,8 @@
     "portfolio",
     "astro",
     "developer",
-    "minimalistic",
-    "personal-website",
+    "data-scientist",
+    "machine-learning",
     "tailwind"
   ],
   "lint-staged": {
